@@ -98,9 +98,13 @@ int main() {
         cout << endl << "q - schließen" << endl;
         cout << "e - eintragen" << endl;
         cout << "a [id] - anzeigen" << endl;
+        cout << "l [id] - löschen" << endl;
         getline(cin, input);
 
         input = removeSpaces(input);
+        int id;
+        istringstream ss(input.substr(1));
+        ss >> id;
         switch (input[0]) {
             case 'e':
                 createQuestion();
@@ -109,9 +113,6 @@ int main() {
                 if (input.substr(1) == "") {
                     getQuestions();
                 } else {
-                    int id;
-                    istringstream ss(input.substr(1));
-                    ss >> id;
                     cout << endl;
                     EXEC SQL BEGIN DECLARE SECTION;
                     int category;
@@ -131,6 +132,13 @@ int main() {
                     cout << "falsche Antwort: " << wrong3 << endl;
                     cout << "Kategorie: " << category << endl;
                 }
+                break;
+            case 'l':
+                EXEC SQL BEGIN DECLARE SECTION;
+                int qid = id;
+                EXEC SQL END DECLARE SECTION;
+                EXEC SQL DELETE FROM quiz WHERE qid = :qid;
+                EXEC SQl COMMIT;
                 break;
         }
     } while(input != "q");
