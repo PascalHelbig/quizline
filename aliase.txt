@@ -1,4 +1,1 @@
-alias step1='ecpg main.cpp'
-alias step2='g++ -I/usr/include/postgresql -c main.c'
-alias step3='g++ -o main main.o -L/usr/lib/psql -lecpg'
-alias runquiz='step1 && step2 && step3 && ./main'
+alias runquiz='ecpg main.cpp && g++ -I/usr/include/postgresql -c main.c && g++ -o main main.o -L/usr/lib/psql -lecpg && ./main'
