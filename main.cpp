@@ -27,6 +27,40 @@ void insertQuestion(int ctg, const char* quest, const char* cor, const char* wr1
     EXEC SQL COMMIT;
 }
 
+void createQuestion() {
+    string question;
+    string answer;
+    string wrong1;
+    string wrong2;
+    string wrong3;
+    string categoryString;
+    int category;
+
+    cout << endl << "Bitte eingeben" << endl;
+    cout << "Deine Frage: ";
+    getline(cin, question);
+
+    cout << "Richtige Antwort: ";
+    getline(cin, answer);
+
+    cout << "Falsche Antwort 1: ";
+    getline(cin, wrong1);
+
+    cout << "Falsche Antwort 2: ";
+    getline(cin, wrong2);
+
+    cout << "Falsche Antwort 3: ";
+    getline(cin, wrong3);
+
+    do {
+        cout << "Kategorie (1-" << MAX_CATEGORIES << "): ";
+        getline(cin, categoryString);
+        istringstream ss(categoryString);
+        ss >> category;
+    } while (category < 1 || category > MAX_CATEGORIES);
+    insertQuestion(category, question.c_str(), answer.c_str(), wrong1.c_str(), wrong2.c_str(), wrong3.c_str());
+}
+
 int main() {
     EXEC SQL CONNECT TO 'csdb3@lamp.wlan.hwr-berlin.de' USER csdb3 IDENTIFIED BY csdb3;
     string input;
@@ -37,37 +71,7 @@ int main() {
 
         switch (input[0]) {
             case 'i':
-                string question;
-                string answer;
-                string wrong1;
-                string wrong2;
-                string wrong3;
-                string categoryString;
-                int category;
-
-                cout << endl << "Bitte eingeben" << endl;
-                cout << "Deine Frage: ";
-                getline(cin, question);
-
-                cout << "Richtige Antwort: ";
-                getline(cin, answer);
-
-                cout << "Falsche Antwort 1: ";
-                getline(cin, wrong1);
-
-                cout << "Falsche Antwort 2: ";
-                getline(cin, wrong2);
-
-                cout << "Falsche Antwort 3: ";
-                getline(cin, wrong3);
-
-                do {
-                    cout << "Kategorie (1-" << MAX_CATEGORIES << "): ";
-                    getline(cin, categoryString);
-                    istringstream ss(categoryString);
-                    ss >> category;
-                } while (category < 1 || category > MAX_CATEGORIES);
-                insertQuestion(category, question.c_str(), answer.c_str(), wrong1.c_str(), wrong2.c_str(), wrong3.c_str());
+                createQuestion();
                 break;
         }
     } while(input != "q");
