@@ -27,6 +27,18 @@ void insertQuestion(int ctg, const char* quest, const char* cor, const char* wr1
     EXEC SQL COMMIT;
 }
 
+string removeSpaces(string input) {
+    int length = input.length();
+    for (int i = 0; i < length; i++) {
+        if(input[i] == ' ') {
+            input.erase(i, 1);
+            length--;
+            i--;
+        }
+    }
+    return input;
+}
+
 void createQuestion() {
     string question;
     string answer;
@@ -88,12 +100,37 @@ int main() {
         cout << "a [id] - anzeigen" << endl;
         getline(cin, input);
 
+        input = removeSpaces(input);
         switch (input[0]) {
             case 'e':
                 createQuestion();
                 break;
             case 'a':
-                getQuestions();
+                if (input.substr(1) == "") {
+                    getQuestions();
+                } else {
+                    int id;
+                    istringstream ss(input.substr(1));
+                    ss >> id;
+                    cout << endl;
+                    EXEC SQL BEGIN DECLARE SECTION;
+                    int category;
+                    int qid = id;
+                    char question[64];
+                    char correct[64];
+                    char wrong1[64];
+                    char wrong2[64];
+                    char wrong3[64];
+                    EXEC SQL END DECLARE SECTION;
+                    EXEC SQL SELECT qid, category, question, correct, wrong1, wrong2, wrong3 INTO :qid, :category, :question, :correct, :wrong1, :wrong2, :wrong3 FROM quiz WHERE qid = :qid;
+                    cout << "Id: " << qid << endl;
+                    cout << "Frage: " << question << endl;
+                    cout << "Antwort: " << correct << endl;
+                    cout << "falsche Antwort: " << wrong1 << endl;
+                    cout << "falsche Antwort: " << wrong2 << endl;
+                    cout << "falsche Antwort: " << wrong3 << endl;
+                    cout << "Kategorie: " << category << endl;
+                }
                 break;
         }
     } while(input != "q");
