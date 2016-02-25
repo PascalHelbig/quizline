@@ -61,17 +61,39 @@ void createQuestion() {
     insertQuestion(category, question.c_str(), answer.c_str(), wrong1.c_str(), wrong2.c_str(), wrong3.c_str());
 }
 
+void getQuestions() {
+    cout << endl;
+    EXEC SQL BEGIN DECLARE SECTION;
+    int category;
+    int qid;
+    char question[64];
+    EXEC SQL END DECLARE SECTION;
+
+    EXEC SQL DECLARE cur CURSOR FOR SELECT qid, category, question FROM quiz;
+    EXEC SQL OPEN cur;
+    EXEC SQL WHENEVER NOT FOUND DO break;
+    while (1) {
+        EXEC SQL FETCH cur INTO :qid, :category, :question;
+        cout << qid << " - " << question << " (" << category << ")" << endl;
+    }
+    EXEC SQL CLOSE cur;
+}
+
 int main() {
     EXEC SQL CONNECT TO 'csdb3@lamp.wlan.hwr-berlin.de' USER csdb3 IDENTIFIED BY csdb3;
     string input;
     do {
         cout << endl << "q - schließen" << endl;
-        cout << "i - eintragen" << endl;
+        cout << "e - eintragen" << endl;
+        cout << "a [id] - anzeigen" << endl;
         getline(cin, input);
 
         switch (input[0]) {
-            case 'i':
+            case 'e':
                 createQuestion();
+                break;
+            case 'a':
+                getQuestions();
                 break;
         }
     } while(input != "q");
