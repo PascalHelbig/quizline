@@ -91,6 +91,23 @@ void getQuestions() {
     EXEC SQL CLOSE cur;
 }
 
+/*void changeQuestionPart(int _id, string partText, const char* partName, char* _part){
+    EXEC SQL BEGIN DECLARE SECTION;
+    const char* part;
+    int id;
+    EXEC SQL END DECLARE SECTION;
+    cout << "alte " << partText <<": " << _part << endl;
+    string tempPart;
+    cout << "neue " << partText <<": ";
+    getline(cin , tempPart);
+    if(tempPart != ""){
+        strcpy(_part, tempPart.c_str());
+    };
+    part = _part;
+    id = _id;
+    EXEC SQL UPDATE quiz SET partName = :part WHERE id = :id;
+}*/
+
 int main() {
     EXEC SQL CONNECT TO 'csdb3@lamp.wlan.hwr-berlin.de' USER csdb3 IDENTIFIED BY csdb3;
     string input;
@@ -99,12 +116,24 @@ int main() {
         cout << "e - eintragen" << endl;
         cout << "a [id] - anzeigen" << endl;
         cout << "l [id] - löschen" << endl;
+        cout << "b [id] - bearbeiten" << endl;
         getline(cin, input);
 
         input = removeSpaces(input);
         int id;
         istringstream ss(input.substr(1));
         ss >> id;
+
+        EXEC SQL BEGIN DECLARE SECTION;
+        int category;
+        int qid = id;
+        char question[64];
+        char correct[64];
+        char wrong1[64];
+        char wrong2[64];
+        char wrong3[64];
+        EXEC SQL END DECLARE SECTION;
+
         switch (input[0]) {
             case 'e':
                 createQuestion();
@@ -114,15 +143,7 @@ int main() {
                     getQuestions();
                 } else {
                     cout << endl;
-                    EXEC SQL BEGIN DECLARE SECTION;
-                    int category;
-                    int qid = id;
-                    char question[64];
-                    char correct[64];
-                    char wrong1[64];
-                    char wrong2[64];
-                    char wrong3[64];
-                    EXEC SQL END DECLARE SECTION;
+
                     EXEC SQL SELECT qid, category, question, correct, wrong1, wrong2, wrong3 INTO :qid, :category, :question, :correct, :wrong1, :wrong2, :wrong3 FROM quiz WHERE qid = :qid;
                     cout << "Id: " << qid << endl;
                     cout << "Frage: " << question << endl;
@@ -134,9 +155,6 @@ int main() {
                 }
                 break;
             case 'l':
-                EXEC SQL BEGIN DECLARE SECTION;
-                int qid = id;
-                EXEC SQL END DECLARE SECTION;
                 if (input.substr(1) == "") {
                     cout << "Welche Frage wollen Sie löschen?" << endl;
                     string selectedId;
@@ -161,6 +179,104 @@ int main() {
 
                 }
                 EXEC SQL DELETE FROM quiz WHERE qid = :qid;
+                EXEC SQl COMMIT;
+                break;
+            case 'b':
+
+                if (input.substr(1) == "") {
+                    cout << "Welche Frage wollen Sie bearbeiten?" << endl;
+                    string selectedId;
+                    getQuestions();
+                    do
+                    {
+                        cout << "Bitte wählen Sie die ID aus!" << endl ;
+                        cout << "Durch q können Sie abbrechen!" << endl;
+                        getline(cin, selectedId);
+                        if ( selectedId == "q" || selectedId == "Q")
+                        {
+                            break;
+                        }
+                        istringstream ss(selectedId);
+                        ss >> qid;
+                        if (qid == 0)
+                        {
+                            cout << selectedId << " ist keine gueltige ID!" << endl;
+                        }
+                    }
+                    while(qid == 0); //ToDo Abfrage, ob ID vorhanden ist
+                }
+
+                EXEC SQL SELECT qid, category, question, correct, wrong1, wrong2, wrong3 INTO :qid, :category, :question, :correct, :wrong1, :wrong2, :wrong3 FROM quiz WHERE qid = :qid;
+                ////////Frage
+                cout << "alte Frage: " << question << endl;
+                string tempQuestion;
+                cout << "neue Frage: ";
+                getline(cin , tempQuestion);
+                if(tempQuestion != ""){
+                    strcpy(question, tempQuestion.c_str());
+                }
+                EXEC SQL UPDATE quiz SET question = :question WHERE qid = :qid;
+                /////Antwort richtig
+                cout << "alte richtige Antwort: " << correct << endl;
+                string tempCorrect;
+                cout << "neue richtige Antwort: ";
+                getline(cin , tempCorrect);
+                if(tempCorrect != ""){
+                    strcpy(correct, tempCorrect.c_str());
+                }
+                EXEC SQL UPDATE quiz SET correct = :correct WHERE qid = :qid;
+
+                /////Antwort falsch 1
+                cout << "alte falsche Antwort 1: " << wrong1 << endl;
+                string tempWrong1;
+                cout << "neue falsche Antwort 1: ";
+                getline(cin , tempWrong1);
+                if(tempWrong1 != ""){
+                    strcpy(wrong1, tempWrong1.c_str());
+                }
+                EXEC SQL UPDATE quiz SET wrong1 = :wrong1 WHERE qid = :qid;
+
+                /////Antwort falsch 2
+                cout << "alte falsche Antwort 2: " << wrong2 << endl;
+                string tempWrong2;
+                cout << "neue falsche Antwort 2: ";
+                getline(cin , tempWrong2);
+                if(tempWrong2 != ""){
+                    strcpy(wrong2, tempWrong2.c_str());
+                }
+                EXEC SQL UPDATE quiz SET wrong2 = :wrong2 WHERE qid = :qid;
+
+                /////Antwort falsch 3
+                cout << "alte falsche Antwort 3: " << wrong3 << endl;
+                string tempWrong3;
+                cout << "neue falsche Antwort 3: ";
+                getline(cin , tempWrong3);
+                if(tempWrong3 != ""){
+                    strcpy(wrong3, tempWrong3.c_str());
+                }
+                EXEC SQL UPDATE quiz SET wrong3 = :wrong3 WHERE qid = :qid;
+                /////Kategorie
+                cout << "alte Kategorie: " << category << endl;
+                int tempCategory;
+                string tempCategoryString;
+                cout << "neue Kategorie (1-" << MAX_CATEGORIES << "): ";
+                    do {
+                        getline(cin, tempCategoryString);
+                        istringstream ss(tempCategoryString);
+                        ss >> tempCategory;
+                    } while (tempCategory < 1 || tempCategory > MAX_CATEGORIES);
+                    category = tempCategory;
+
+                EXEC SQL UPDATE quiz SET category = :category WHERE qid = :qid;
+
+/*
+                changeQuestionPart(qid, "falsche Antwort_1", "wrong1", wrong1);
+                changeQuestionPart(qid, "falsche Antwort_2", "wrong2", wrong2);
+                changeQuestionPart(qid, "falsche Antwort_3", "wrong3", wrong3);
+*/
+
+
+                //cout << "Kategorie: " << category << endl;
                 EXEC SQl COMMIT;
                 break;
         }
