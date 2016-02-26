@@ -137,6 +137,24 @@ int main() {
                 EXEC SQL BEGIN DECLARE SECTION;
                 int qid = id;
                 EXEC SQL END DECLARE SECTION;
+                if (input.substr(1) == "") {
+                    cout << "Welche Frage wollen Sie löschen?" << endl;
+                    string selectedId;
+                    getQuestions();
+                    do
+                    {
+                        cout << "Bitte wählen Sie die ID aus!" << endl;
+                        getline(cin, selectedId);
+                        istringstream ss(selectedId);
+                        ss >> qid;
+                        if (qid == 0)
+                        {
+                            cout << qid << " ist keine gueltige ID!" << endl;
+                        }
+                    }
+                    while(qid == 0); //ToDo Abfrage, ob ID vorhanden ist
+
+                }
                 EXEC SQL DELETE FROM quiz WHERE qid = :qid;
                 EXEC SQl COMMIT;
                 break;
