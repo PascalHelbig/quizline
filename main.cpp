@@ -261,7 +261,10 @@ int main() {
                     istringstream ss(tempCategoryString);
                     ss >> tempCategory;
                 } while ((tempCategory < 1 || tempCategory > MAX_CATEGORIES) && tempCategoryString != "");
-                category = tempCategory;
+                // Überspringen, wenn Kategorie mit Enter verlassen wurde:
+                if (tempCategoryString != "") {
+                    category = tempCategory;
+                }
 
                 EXEC SQL UPDATE quiz SET correct = :correct, question = :question, wrong1 = :wrong1, wrong2 = :wrong2, wrong3 = :wrong3, category = :category WHERE qid = :qid;
 /*
