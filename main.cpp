@@ -264,7 +264,7 @@ int main() {
                     getline(cin, tempCategoryString);
                     istringstream ss(tempCategoryString);
                     ss >> tempCategory;
-                } while (tempCategory < 1 || tempCategory > MAX_CATEGORIES);
+                } while ((tempCategory < 1 || tempCategory > MAX_CATEGORIES) && tempCategoryString != "");
                 category = tempCategory;
 
                 EXEC SQL UPDATE quiz SET category = :category WHERE qid = :qid;
