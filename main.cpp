@@ -259,8 +259,8 @@ int main() {
                 cout << "alte Kategorie: " << category << endl;
                 int tempCategory;
                 string tempCategoryString;
-                cout << "neue Kategorie (1-" << MAX_CATEGORIES << "): ";
                 do {
+                    cout << "neue Kategorie (1-" << MAX_CATEGORIES << "): ";
                     getline(cin, tempCategoryString);
                     istringstream ss(tempCategoryString);
                     ss >> tempCategory;
