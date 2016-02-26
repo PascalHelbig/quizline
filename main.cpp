@@ -182,7 +182,6 @@ int main() {
                 EXEC SQl COMMIT;
                 break;
             case 'b':
-
                 if (input.substr(1) == "") {
                     cout << "Welche Frage wollen Sie bearbeiten?" << endl;
                     string selectedId;
@@ -215,7 +214,7 @@ int main() {
                 if(tempQuestion != ""){
                     strcpy(question, tempQuestion.c_str());
                 }
-                EXEC SQL UPDATE quiz SET question = :question WHERE qid = :qid;
+
                 /////Antwort richtig
                 cout << "alte richtige Antwort: " << correct << endl;
                 string tempCorrect;
@@ -224,7 +223,6 @@ int main() {
                 if(tempCorrect != ""){
                     strcpy(correct, tempCorrect.c_str());
                 }
-                EXEC SQL UPDATE quiz SET correct = :correct WHERE qid = :qid;
 
                 /////Antwort falsch 1
                 cout << "alte falsche Antwort 1: " << wrong1 << endl;
@@ -234,7 +232,6 @@ int main() {
                 if(tempWrong1 != ""){
                     strcpy(wrong1, tempWrong1.c_str());
                 }
-                EXEC SQL UPDATE quiz SET wrong1 = :wrong1 WHERE qid = :qid;
 
                 /////Antwort falsch 2
                 cout << "alte falsche Antwort 2: " << wrong2 << endl;
@@ -244,7 +241,6 @@ int main() {
                 if(tempWrong2 != ""){
                     strcpy(wrong2, tempWrong2.c_str());
                 }
-                EXEC SQL UPDATE quiz SET wrong2 = :wrong2 WHERE qid = :qid;
 
                 /////Antwort falsch 3
                 cout << "alte falsche Antwort 3: " << wrong3 << endl;
@@ -254,7 +250,7 @@ int main() {
                 if(tempWrong3 != ""){
                     strcpy(wrong3, tempWrong3.c_str());
                 }
-                EXEC SQL UPDATE quiz SET wrong3 = :wrong3 WHERE qid = :qid;
+
                 /////Kategorie
                 cout << "alte Kategorie: " << category << endl;
                 int tempCategory;
@@ -267,16 +263,12 @@ int main() {
                 } while ((tempCategory < 1 || tempCategory > MAX_CATEGORIES) && tempCategoryString != "");
                 category = tempCategory;
 
-                EXEC SQL UPDATE quiz SET category = :category WHERE qid = :qid;
-
+                EXEC SQL UPDATE quiz SET correct = :correct, question = :question, wrong1 = :wrong1, wrong2 = :wrong2, wrong3 = :wrong3, category = :category WHERE qid = :qid;
 /*
                 changeQuestionPart(qid, "falsche Antwort_1", "wrong1", wrong1);
                 changeQuestionPart(qid, "falsche Antwort_2", "wrong2", wrong2);
                 changeQuestionPart(qid, "falsche Antwort_3", "wrong3", wrong3);
 */
-
-
-                //cout << "Kategorie: " << category << endl;
                 EXEC SQl COMMIT;
                 break;
         }
