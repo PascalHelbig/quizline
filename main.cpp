@@ -143,13 +143,18 @@ int main() {
                     getQuestions();
                     do
                     {
-                        cout << "Bitte wählen Sie die ID aus!" << endl;
+                        cout << "Bitte wählen Sie die ID aus!" << endl ;
+                        cout << "Durch q können Sie abbrechen!" << endl;
                         getline(cin, selectedId);
+                        if ( selectedId == "q" || selectedId == "Q")
+                        {
+                            break;
+                        }
                         istringstream ss(selectedId);
                         ss >> qid;
                         if (qid == 0)
                         {
-                            cout << qid << " ist keine gueltige ID!" << endl;
+                            cout << selectedId << " ist keine gueltige ID!" << endl;
                         }
                     }
                     while(qid == 0); //ToDo Abfrage, ob ID vorhanden ist
