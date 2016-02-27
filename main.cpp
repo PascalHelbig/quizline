@@ -188,7 +188,7 @@ int main() {
                     getQuestions();
                     do
                     {
-                        cout << "Bitte wählen Sie die ID aus!" << endl ;
+                        cout << endl << "Bitte wählen Sie die ID aus!" << endl ;
                         cout << "Durch q können Sie abbrechen!" << endl;
                         getline(cin, selectedId);
                         if ( selectedId == "q" || selectedId == "Q")
