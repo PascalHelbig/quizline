@@ -247,6 +247,9 @@ int main() {
             case '3':
                 deleteQuestion(id);
                 break;
+            case '4':
+                editQuestion(id);
+                break;
             case '5':
                 createCategory();
                 break;
@@ -327,10 +330,6 @@ int main() {
 
                 EXEC SQL UPDATE category SET name = :name WHERE cid = :cid;
                 EXEC SQl COMMIT;
-                break;
-
-            case '4':
-                editQuestion(id);
                 break;
         }
     } while(input != "q");
