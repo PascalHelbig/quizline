@@ -33,3 +33,11 @@ Question* SqlHelper::getQuestion(int questionId) {
     EXEC SQL SELECT qid, category, question, correct, wrong1, wrong2, wrong3 INTO :qid, :category, :question, :correct, :wrong1, :wrong2, :wrong3 FROM quiz WHERE qid = :qid;
     return new Question(category, string(question), string(correct), string(wrong1), string(wrong2), string(wrong3), qid);
 }
+
+void SqlHelper::deleteQuestion(int questionId) {
+    EXEC SQL BEGIN DECLARE SECTION;
+    int qid = questionId;
+    EXEC SQL END DECLARE SECTION;
+    EXEC SQL DELETE FROM quiz WHERE qid = :qid;
+    EXEC SQl COMMIT;
+}

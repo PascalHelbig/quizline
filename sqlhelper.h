@@ -7,5 +7,6 @@ public:
     static void openDatabase();
     static void insertQuestions(Question* q);
     static Question* getQuestion(int questionId);
+    static void deleteQuestion(int questionId);
 };
 #endif //QUIZLINE_SQLHELPER_H

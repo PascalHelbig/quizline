@@ -118,6 +118,32 @@ void getCategories() {
     EXEC SQL CLOSE cur2;
 }
 
+void deleteQuestion(int id) {
+    if (id == -1) {
+        cout << "Welche Frage wollen Sie löschen?" << endl;
+        string selectedId;
+        getQuestions();
+        do
+        {
+            cout << "Bitte wählen Sie die ID aus!" << endl ;
+            cout << "Durch q können Sie abbrechen!" << endl;
+            getline(cin, selectedId);
+            if ( selectedId == "q" || selectedId == "Q")
+            {
+                return;
+            }
+            istringstream ss(selectedId);
+            ss >> id;
+            if (id == -1)
+            {
+                cout << selectedId << " ist keine gueltige ID!" << endl;
+            }
+        }
+        while(id == -1); //ToDo Abfrage, ob ID vorhanden ist
+    }
+    SqlHelper::deleteQuestion(id);
+}
+
 int main() {
     SqlHelper::openDatabase();
     string input;
@@ -139,6 +165,7 @@ int main() {
         int id;
         istringstream ss(input.substr(1));
         ss >> id;
+        id = input.substr(1) == "" ? -1 : id;
 
         EXEC SQL BEGIN DECLARE SECTION;
         int category;
@@ -164,33 +191,8 @@ int main() {
                 }
                 break;
             case '3':
-                if (input.substr(1) == "") {
-                    cout << "Welche Frage wollen Sie löschen?" << endl;
-                    string selectedId;
-                    getQuestions();
-                    do
-                    {
-                        cout << "Bitte wählen Sie die ID aus!" << endl ;
-                        cout << "Durch q können Sie abbrechen!" << endl;
-                        getline(cin, selectedId);
-                        if ( selectedId == "q" || selectedId == "Q")
-                        {
-                            break;
-                        }
-                        istringstream ss(selectedId);
-                        ss >> qid;
-                        if (qid == 0)
-                        {
-                            cout << selectedId << " ist keine gueltige ID!" << endl;
-                        }
-                    }
-                    while(qid == 0); //ToDo Abfrage, ob ID vorhanden ist
-
-                }
-                EXEC SQL DELETE FROM quiz WHERE qid = :qid;
-                EXEC SQl COMMIT;
+                deleteQuestion(id);
                 break;
-
             case '5':
                 createCategory();
                 break;
