@@ -1,9 +1,10 @@
 #include "question.h"
+#include <string>
 
 Question::Question() { }
 
-Question::Question(int category, const char *question, const char *correct, const char *wrong1, const char *wrong2,
-                   const char *wrong3) {
+Question::Question(int category, std::string question, std::string correct, std::string wrong1, std::string wrong2,
+                   std::string wrong3) {
     Question::category = category;
     Question::question = question;
     Question::correct = correct;

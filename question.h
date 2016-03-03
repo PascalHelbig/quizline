@@ -1,15 +1,17 @@
+#include <string>
+
 #ifndef QUIZLINE_QUESTION_H
 #define QUIZLINE_QUESTION_H
 class Question {
 public:
     Question();
-    Question(int category, const char* question, const char* correct, const char* wrong1, const char* wrong2, const char* wrong3);
+    Question(int category, std::string question, std::string correct, std::string wrong1, std::string wrong2, std::string wrong3);
 
     int category;
-    const char* question;
-    const char* correct;
-    const char* wrong1;
-    const char* wrong2;
-    const char* wrong3;
+    std::string question;
+    std::string correct;
+    std::string wrong1;
+    std::string wrong2;
+    std::string wrong3;
 };
 #endif //QUIZLINE_QUESTION_H

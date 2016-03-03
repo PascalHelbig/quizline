@@ -32,38 +32,34 @@ string removeSpaces(string input) {
 }
 
 void createQuestion() {
-    string question;
-    string answer;
-    string wrong1;
-    string wrong2;
-    string wrong3;
-    string categoryString;
-    int category;
+    Question* q = new Question();
 
     cout << endl << "Bitte eingeben" << endl;
     cout << "Deine Frage: ";
-    getline(cin, question);
+    getline(cin, q->question);
 
     cout << "Richtige Antwort: ";
-    getline(cin, answer);
+    getline(cin, q->correct);
 
     cout << "Falsche Antwort 1: ";
-    getline(cin, wrong1);
+    getline(cin, q->wrong1);
 
     cout << "Falsche Antwort 2: ";
-    getline(cin, wrong2);
+    getline(cin, q->wrong2);
 
     cout << "Falsche Antwort 3: ";
-    getline(cin, wrong3);
+    getline(cin, q->wrong3);
 
+    string categoryString;
     do {
         cout << "Kategorie (1-" << MAX_CATEGORIES << "): ";
         getline(cin, categoryString);
         istringstream ss(categoryString);
-        ss >> category;
-    } while (category < 1 || category > MAX_CATEGORIES);
-    SqlHelper::insertQuestions(new Question(category, question.c_str(), answer.c_str(), wrong1.c_str(), wrong2.c_str(), wrong3.c_str()));
-    cout << "inserted " << question << endl;
+        ss >> q->category;
+    } while (q->category < 1 || q->category > MAX_CATEGORIES);
+
+    SqlHelper::insertQuestions(q);
+    cout << "inserted " << q->question << endl;
 }
 
 void createCategory() {
