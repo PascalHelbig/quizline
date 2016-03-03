@@ -1,13 +1,14 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include "question.h"
 
 using namespace std;
 
 const int MAX_CATEGORIES = 3;
 
-void insertQuestion(int ctg, const char* quest, const char* cor, const char* wr1, const char* wr2, const char* wr3) {
-    cout << "inserted " << quest << endl;
+void insertQuestion(Question *q) {
+    cout << "inserted " << q->question << endl;
     EXEC SQL BEGIN DECLARE SECTION;
     int category;
     const char* question;
@@ -16,12 +17,12 @@ void insertQuestion(int ctg, const char* quest, const char* cor, const char* wr1
     const char* wrong2;
     const char* wrong3;
     EXEC SQL END DECLARE SECTION;
-    category = ctg;
-    question = quest;
-    correct = cor;
-    wrong1 = wr1;
-    wrong2 = wr2;
-    wrong3 = wr3;
+    category = q->category;
+    question = q->question;
+    correct = q->correct;
+    wrong1 = q->wrong1;
+    wrong2 = q->wrong2;
+    wrong3 = q->wrong3;
 
     EXEC SQL INSERT INTO "quiz" VALUES (:category, :question, :correct, :wrong1, :wrong2, :wrong3);
     EXEC SQL COMMIT;
@@ -81,7 +82,7 @@ void createQuestion() {
         istringstream ss(categoryString);
         ss >> category;
     } while (category < 1 || category > MAX_CATEGORIES);
-    insertQuestion(category, question.c_str(), answer.c_str(), wrong1.c_str(), wrong2.c_str(), wrong3.c_str());
+    insertQuestion(new Question(category, question.c_str(), answer.c_str(), wrong1.c_str(), wrong2.c_str(), wrong3.c_str()));
 }
 
 void createCategory() {
