@@ -1,1 +1,1 @@
-alias runquiz='ecpg main.cpp question.cpp && g++ -I/usr/include/postgresql -c main.c question.c && g++ -o main main.o question.o -L/usr/lib/psql -lecpg && ./main'
+alias runquiz='ecpg main.cpp question.cpp sqlhelper.cpp && g++ -I/usr/include/postgresql -c main.c question.c sqlhelper.c && g++ -o main main.o question.o sqlhelper.o -L/usr/lib/psql -lecpg && ./main'

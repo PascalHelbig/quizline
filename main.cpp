@@ -2,6 +2,7 @@
 #include <string>
 #include <sstream>
 #include "question.h"
+#include "sqlhelper.h"
 
 using namespace std;
 
@@ -130,7 +131,7 @@ void getCategories() {
 }
 
 int main() {
-    EXEC SQL CONNECT TO 'csdb3@lamp.wlan.hwr-berlin.de' USER csdb3 IDENTIFIED BY csdb3;
+    SqlHelper::openDatabase();
     string input;
     do {
         cout << endl << "q - schließen" <<  endl;
