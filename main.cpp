@@ -92,8 +92,7 @@ void getQuestions() {
 void getQuestion(int id) {
     Question* q = SqlHelper::getQuestion(id);
     cout << endl;
-    // Todo: ID fehlt in Klasse Question:
-    //cout << "Id: " << qid << endl;
+    cout << "Id: " << q->qid << endl;
     cout << "Frage: " << q->question << endl;
     cout << "Antwort: " << q->correct << endl;
     cout << "falsche Antwort: " << q->wrong1 << endl;
