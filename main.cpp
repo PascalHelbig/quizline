@@ -8,27 +8,6 @@ using namespace std;
 
 const int MAX_CATEGORIES = 3;
 
-void insertQuestion(Question *q) {
-    cout << "inserted " << q->question << endl;
-    EXEC SQL BEGIN DECLARE SECTION;
-    int category;
-    const char* question;
-    const char* correct;
-    const char* wrong1;
-    const char* wrong2;
-    const char* wrong3;
-    EXEC SQL END DECLARE SECTION;
-    category = q->category;
-    question = q->question;
-    correct = q->correct;
-    wrong1 = q->wrong1;
-    wrong2 = q->wrong2;
-    wrong3 = q->wrong3;
-
-    EXEC SQL INSERT INTO "quiz" VALUES (:category, :question, :correct, :wrong1, :wrong2, :wrong3);
-    EXEC SQL COMMIT;
-}
-
 void insertCategory(const char* ctg) {
     EXEC SQL BEGIN DECLARE SECTION;
     const char* cat;
@@ -83,7 +62,8 @@ void createQuestion() {
         istringstream ss(categoryString);
         ss >> category;
     } while (category < 1 || category > MAX_CATEGORIES);
-    insertQuestion(new Question(category, question.c_str(), answer.c_str(), wrong1.c_str(), wrong2.c_str(), wrong3.c_str()));
+    SqlHelper::insertQuestions(new Question(category, question.c_str(), answer.c_str(), wrong1.c_str(), wrong2.c_str(), wrong3.c_str()));
+    cout << "inserted " << question << endl;
 }
 
 void createCategory() {
