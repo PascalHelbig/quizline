@@ -1,4 +1,5 @@
 #include "question.h"
+#include "category.h"
 
 #ifndef QUIZLINE_SQLHELPER_H
 #define QUIZLINE_SQLHELPER_H
@@ -9,5 +10,7 @@ public:
     static Question* getQuestion(int questionId);
     static void deleteQuestion(int questionId);
     static void updateQuestion(Question* q);
+
+    static void insertCategory(Category* c);
 };
 #endif //QUIZLINE_SQLHELPER_H

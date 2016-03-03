@@ -2,22 +2,12 @@
 #include <string>
 #include <sstream>
 #include "question.h"
+#include "category.h"
 #include "sqlhelper.h"
 
 using namespace std;
 
 const int MAX_CATEGORIES = 3;
-
-void insertCategory(const char* ctg) {
-    EXEC SQL BEGIN DECLARE SECTION;
-    const char* cat;
-    EXEC SQL END DECLARE SECTION;
-    cat = ctg;
-    cout << cat;
-
-    EXEC SQL INSERT INTO "category" ("name") VALUES (:cat);
-    EXEC SQL COMMIT;
-}
 
 string removeSpaces(string input) {
     int length = input.length();
@@ -63,12 +53,10 @@ void createQuestion() {
 }
 
 void createCategory() {
-    string categoryString;
-
+    Category* category = new Category();
     cout << endl << "Bitte Kategoriebezeichnung eingeben: ";
-    getline(cin, categoryString);
-
-    insertCategory(categoryString.c_str());
+    getline(cin, category->name);
+    SqlHelper::insertCategory(category);
 }
 
 void getQuestions() {

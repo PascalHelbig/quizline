@@ -4,8 +4,9 @@
 #define QUIZLINE_CATEGORY_H
 class Category {
 public:
-    Category(int cid, std::string name);
+    Category();
     Category(std::string name);
+    Category(int cid, std::string name);
 
     int cid;
     std::string name;

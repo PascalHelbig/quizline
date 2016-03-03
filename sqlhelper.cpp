@@ -61,3 +61,11 @@ void SqlHelper::updateQuestion(Question *q) {
     EXEC SQL UPDATE quiz SET correct = :correct, question = :question, wrong1 = :wrong1, wrong2 = :wrong2, wrong3 = :wrong3, category = :category WHERE qid = :qid;
     EXEC SQl COMMIT;
 }
+
+void SqlHelper::insertCategory(Category *c) {
+    EXEC SQL BEGIN DECLARE SECTION;
+    const char* name = c->name.c_str();
+    EXEC SQL END DECLARE SECTION;
+    EXEC SQL INSERT INTO "category" ("name") VALUES (:name);
+    EXEC SQL COMMIT;
+}

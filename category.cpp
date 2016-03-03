@@ -9,3 +9,5 @@ Category::Category(int cid, std::string name) {
 Category::Category(std::string name) {
     Category::name = name;
 }
+
+Category::Category() { }
