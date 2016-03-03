@@ -132,16 +132,17 @@ int main() {
     EXEC SQL CONNECT TO 'csdb3@lamp.wlan.hwr-berlin.de' USER csdb3 IDENTIFIED BY csdb3;
     string input;
     do {
-        cout << endl << "q - schließen" << endl;
-        cout << "1 - Frage eintragen" << endl;
-        cout << "2 [id] - Frage anzeigen" << endl;
-        cout << "3 [id] - Frage löschen" << endl;
-        cout << "4 [id] - Frage bearbeiten" << endl;
-        //////////category
+        cout << endl << "q - schließen" <<  endl;
+        cout <<  "////////Fragen///////////////////////Kategorien//////////" <<  endl;
+        cout << "1 - Frage eintragen" <<  "        //    5 - Kategorie eintragen" << endl;
+        cout << "2 [id] - Frage anzeigen" << "    //    6 [id] - Kategorie anzeigen" << endl;
+        cout << "3 [id] - Frage löschen" << "     //    7 [id] - Kategorie löschen" <<endl;
+        cout << "4 [id] - Frage bearbeiten" << "  //    8 [id] - Ka tegorie bearbeiten" << endl;
+/*        //////////category
         cout << "5 - Kategorie eintragen" << endl;
         cout << "6 [id] - Kategorie anzeigen" << endl;
         cout << "7 [id] - Kategorie löschen" << endl;
-        cout << "8 [id] - Kategorie bearbeiten" << endl;
+        cout << "8 [id] - Kategorie bearbeiten" << endl;*/
         getline(cin, input);
 
         input = removeSpaces(input);
@@ -158,6 +159,7 @@ int main() {
         char wrong1[64];
         char wrong2[64];
         char wrong3[64];
+        char name[64];
         EXEC SQL END DECLARE SECTION;
 
         switch (input[0]) {
@@ -223,8 +225,71 @@ int main() {
                 }
                 break;
             case '7':
+                if (input.substr(1) == "") {
+                    cout << "Welche Kategorie wollen Sie löschen?" << endl;
+                    string selectedcId;
+                    getCategories();
+                    do
+                    {
+                        cout << "Bitte wählen Sie die ID aus!" << endl ;
+                        cout << "Durch q können Sie abbrechen!" << endl;
+                        getline(cin, selectedcId);
+                        if ( selectedcId == "q" || selectedcId == "Q")
+                        {
+                            break;
+                        }
+                        istringstream ss(selectedcId);
+                        ss >> cid;
+                        if (cid == 0)
+                        {
+                            cout << selectedcId << " ist keine gueltige ID!" << endl;
+                        }
+                    }
+                    while(cid == 0); //ToDo Abfrage, ob ID vorhanden ist
+
+                }
+                EXEC SQL DELETE FROM category WHERE cid = :cid;
+                EXEC SQl COMMIT;
                 break;
             case '8':
+                if (input.substr(1) == "") {
+                    cout << "Welche Kategorie wollen Sie bearbeiten?" << endl;
+                    string selectedcId;
+                    getCategories();
+                    do
+                    {
+                        cout << endl << "Bitte wählen Sie die ID aus!" << endl ;
+                        cout << "Durch q können Sie abbrechen!" << endl;
+                        getline(cin, selectedcId);
+                        if ( selectedcId == "q" || selectedcId == "Q")
+                        {
+                            break;
+                        }
+                        istringstream ss(selectedcId);
+                        ss >> cid;
+                        if (cid == 0)
+                        {
+                            cout << selectedcId << " ist keine gueltige ID!" << endl;
+                        }
+                    }
+                    while(cid == 0); //ToDo Abfrage, ob ID vorhanden ist
+                }
+
+                EXEC SQL SELECT cid, name INTO :cid, :name FROM category WHERE cid = :cid;
+                ////////Frage
+                {
+                cout << "alte Kategoriebezeichnung: " << name << endl;
+                string tempName;
+                cout << "neue Kategoriebezeichnung: ";
+                getline(cin , tempName);
+                if(tempName != ""){
+                    strcpy(name, tempName.c_str());
+                }
+                }
+                cout << "neue Kategoriebezeichnung: ";
+
+                EXEC SQL UPDATE category SET name = :name WHERE cid = :cid;
+                EXEC SQl COMMIT;
                 break;
 
             case '4':
