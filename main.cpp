@@ -89,6 +89,19 @@ void getQuestions() {
     EXEC SQL CLOSE cur;
 }
 
+void getQuestion(int id) {
+    Question* q = SqlHelper::getQuestion(id);
+    cout << endl;
+    // Todo: ID fehlt in Klasse Question:
+    //cout << "Id: " << qid << endl;
+    cout << "Frage: " << q->question << endl;
+    cout << "Antwort: " << q->correct << endl;
+    cout << "falsche Antwort: " << q->wrong1 << endl;
+    cout << "falsche Antwort: " << q->wrong2 << endl;
+    cout << "falsche Antwort: " << q->wrong3 << endl;
+    cout << "Kategorie: " << q->category << endl;
+}
+
 void getCategories() {
     cout << endl;
     EXEC SQL BEGIN DECLARE SECTION;
@@ -148,16 +161,7 @@ int main() {
                 if (input.substr(1) == "") {
                     getQuestions();
                 } else {
-                    cout << endl;
-
-                    EXEC SQL SELECT qid, category, question, correct, wrong1, wrong2, wrong3 INTO :qid, :category, :question, :correct, :wrong1, :wrong2, :wrong3 FROM quiz WHERE qid = :qid;
-                    cout << "Id: " << qid << endl;
-                    cout << "Frage: " << question << endl;
-                    cout << "Antwort: " << correct << endl;
-                    cout << "falsche Antwort: " << wrong1 << endl;
-                    cout << "falsche Antwort: " << wrong2 << endl;
-                    cout << "falsche Antwort: " << wrong3 << endl;
-                    cout << "Kategorie: " << category << endl;
+                    getQuestion(id);
                 }
                 break;
             case '3':
