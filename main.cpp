@@ -32,8 +32,9 @@ void insertCategory(const char* ctg) {
     const char* cat;
     EXEC SQL END DECLARE SECTION;
     cat = ctg;
+    cout << cat;
 
-    EXEC SQL INSERT INTO "category" VALUES (:cat);
+    EXEC SQL INSERT INTO "category" ("name") VALUES (:cat);
     EXEC SQL COMMIT;
 }
 
@@ -84,12 +85,12 @@ void createQuestion() {
 }
 
 void createCategory() {
-    string categoryString1;
+    string categoryString;
 
     cout << endl << "Bitte Kategoriebezeichnung eingeben: ";
-    getline(cin, categoryString1);
+    getline(cin, categoryString);
 
-    insertCategory(categoryString1.c_str());
+    insertCategory(categoryString.c_str());
 }
 
 void getQuestions() {
@@ -110,6 +111,22 @@ void getQuestions() {
     EXEC SQL CLOSE cur;
 }
 
+void getCategories() {
+    cout << endl;
+    EXEC SQL BEGIN DECLARE SECTION;
+    int cid;
+    char name[64];
+    EXEC SQL END DECLARE SECTION;
+
+    EXEC SQL DECLARE cur2 CURSOR FOR SELECT cid, name FROM category;
+    EXEC SQL OPEN cur2;
+    EXEC SQL WHENEVER NOT FOUND DO break;
+    while (1) {
+        EXEC SQL FETCH cur2 INTO :cid, :name;
+        cout << cid << " - " << name << endl;
+    }
+    EXEC SQL CLOSE cur2;
+}
 
 int main() {
     EXEC SQL CONNECT TO 'csdb3@lamp.wlan.hwr-berlin.de' USER csdb3 IDENTIFIED BY csdb3;
@@ -135,6 +152,7 @@ int main() {
         EXEC SQL BEGIN DECLARE SECTION;
         int category;
         int qid = id;
+        int cid = id;
         char question[64];
         char correct[64];
         char wrong1[64];
@@ -194,7 +212,15 @@ int main() {
                 createCategory();
                 break;
             case '6':
+                if (input.substr(1) == "") {
+                    getCategories();
+                } else {
+                    cout << endl;
 
+                    EXEC SQL SELECT cid, name INTO :cid, :category FROM category WHERE cid = :cid;
+                    cout << "Id: " << cid << endl;
+                    cout << "Kategoriebezeichnung: " << category << endl;
+                }
                 break;
             case '7':
                 break;
