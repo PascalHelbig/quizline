@@ -159,32 +159,27 @@ void editQuestion(int id) {
     string temp;
 
     ////////Frage
-    cout << "alte Frage: " << q->question << endl;
-    cout << "neue Frage: ";
+    cout << "alte Frage: " << q->question << endl << "neue Frage: ";
     getline(cin , temp);
     q->question = temp == "" ? q->question : temp;
 
     /////Antwort richtig
-    cout << "alte richtige Antwort: " << q->correct << endl;
-    cout << "neue richtige Antwort: ";
+    cout << "alte richtige Antwort: " << q->correct << endl << "neue richtige Antwort: ";
     getline(cin , temp);
     q->correct = temp == "" ? q->correct : temp;
 
     /////Antwort falsch 1
-    cout << "alte falsche Antwort 1: " << q->wrong1 << endl;
-    cout << "neue falsche Antwort 1: ";
+    cout << "alte falsche Antwort 1: " << q->wrong1 << endl << "neue falsche Antwort 1: ";
     getline(cin , temp);
     q->wrong1 = temp == "" ? q->wrong1 : temp;
 
     /////Antwort falsch 2
-    cout << "alte falsche Antwort 2: " << q->wrong2 << endl;
-    cout << "neue falsche Antwort 2: ";
+    cout << "alte falsche Antwort 2: " << q->wrong2 << endl << "neue falsche Antwort 2: ";
     getline(cin , temp);
     q->wrong2 = temp == "" ? q->wrong2 : temp;
 
     /////Antwort falsch 3
-    cout << "alte falsche Antwort 3: " << q->wrong3 << endl;
-    cout << "neue falsche Antwort 3: ";
+    cout << "alte falsche Antwort 3: " << q->wrong3 << endl << "neue falsche Antwort 3: ";
     getline(cin , temp);
     q->wrong3 = temp == "" ? q->wrong3 : temp;
 
