@@ -138,6 +138,71 @@ void deleteQuestion(int id) {
     SqlHelper::deleteQuestion(id);
 }
 
+void editQuestion(int id) {
+    string selectedId;
+    while (id == -1) {
+        cout << "Welche Frage wollen Sie bearbeiten?" << endl;
+        getQuestions();
+        cout << endl << "Bitte wählen Sie die ID aus!" << endl ;
+        cout << "Durch q können Sie abbrechen!" << endl;
+        getline(cin, selectedId);
+        if ( selectedId == "q" || selectedId == "Q") {
+            return;
+        }
+        istringstream ss(selectedId);
+        ss >> id;
+        if (id == -1) {
+            cout << selectedId << " ist keine gueltige ID!" << endl;
+        }
+    }
+    Question* q = SqlHelper::getQuestion(id);
+    string temp;
+
+    ////////Frage
+    cout << "alte Frage: " << q->question << endl;
+    cout << "neue Frage: ";
+    getline(cin , temp);
+    q->question = temp == "" ? q->question : temp;
+
+    /////Antwort richtig
+    cout << "alte richtige Antwort: " << q->correct << endl;
+    cout << "neue richtige Antwort: ";
+    getline(cin , temp);
+    q->correct = temp == "" ? q->correct : temp;
+
+    /////Antwort falsch 1
+    cout << "alte falsche Antwort 1: " << q->wrong1 << endl;
+    cout << "neue falsche Antwort 1: ";
+    getline(cin , temp);
+    q->wrong1 = temp == "" ? q->wrong1 : temp;
+
+    /////Antwort falsch 2
+    cout << "alte falsche Antwort 2: " << q->wrong2 << endl;
+    cout << "neue falsche Antwort 2: ";
+    getline(cin , temp);
+    q->wrong2 = temp == "" ? q->wrong2 : temp;
+
+    /////Antwort falsch 3
+    cout << "alte falsche Antwort 3: " << q->wrong3 << endl;
+    cout << "neue falsche Antwort 3: ";
+    getline(cin , temp);
+    q->wrong3 = temp == "" ? q->wrong3 : temp;
+
+    /////Kategorie
+    cout << "alte Kategorie: " << q->category << endl;
+    int tempCategory;
+    do {
+        cout << "neue Kategorie (1-" << MAX_CATEGORIES << "): ";
+        getline(cin, temp);
+        istringstream ss(temp);
+        ss >> tempCategory;
+    } while ((tempCategory < 1 || tempCategory > MAX_CATEGORIES) && temp != "");
+    // Überspringen, wenn Kategorie mit Enter verlassen wurde:
+    q->category = temp == "" ? q->category : tempCategory;
+
+    SqlHelper::updateQuestion(q);
+}
+
 int main() {
     SqlHelper::openDatabase();
     string input;
@@ -270,94 +335,8 @@ int main() {
                 break;
 
             case '4':
-                if (input.substr(1) == "") {
-                    cout << "Welche Frage wollen Sie bearbeiten?" << endl;
-                    string selectedId;
-                    getQuestions();
-                    do
-                    {
-                        cout << endl << "Bitte wählen Sie die ID aus!" << endl ;
-                        cout << "Durch q können Sie abbrechen!" << endl;
-                        getline(cin, selectedId);
-                        if ( selectedId == "q" || selectedId == "Q")
-                        {
-                            break;
-                        }
-                        istringstream ss(selectedId);
-                        ss >> qid;
-                        if (qid == 0)
-                        {
-                            cout << selectedId << " ist keine gueltige ID!" << endl;
-                        }
-                    }
-                    while(qid == 0); //ToDo Abfrage, ob ID vorhanden ist
-                }
-
-                EXEC SQL SELECT qid, category, question, correct, wrong1, wrong2, wrong3 INTO :qid, :category, :question, :correct, :wrong1, :wrong2, :wrong3 FROM quiz WHERE qid = :qid;
-                ////////Frage
-                cout << "alte Frage: " << question << endl;
-                string tempQuestion;
-                cout << "neue Frage: ";
-                getline(cin , tempQuestion);
-                if(tempQuestion != ""){
-                    strcpy(question, tempQuestion.c_str());
-                }
-
-                /////Antwort richtig
-                cout << "alte richtige Antwort: " << correct << endl;
-                string tempCorrect;
-                cout << "neue richtige Antwort: ";
-                getline(cin , tempCorrect);
-                if(tempCorrect != ""){
-                    strcpy(correct, tempCorrect.c_str());
-                }
-
-                /////Antwort falsch 1
-                cout << "alte falsche Antwort 1: " << wrong1 << endl;
-                string tempWrong1;
-                cout << "neue falsche Antwort 1: ";
-                getline(cin , tempWrong1);
-                if(tempWrong1 != ""){
-                    strcpy(wrong1, tempWrong1.c_str());
-                }
-
-                /////Antwort falsch 2
-                cout << "alte falsche Antwort 2: " << wrong2 << endl;
-                string tempWrong2;
-                cout << "neue falsche Antwort 2: ";
-                getline(cin , tempWrong2);
-                if(tempWrong2 != ""){
-                    strcpy(wrong2, tempWrong2.c_str());
-                }
-
-                /////Antwort falsch 3
-                cout << "alte falsche Antwort 3: " << wrong3 << endl;
-                string tempWrong3;
-                cout << "neue falsche Antwort 3: ";
-                getline(cin , tempWrong3);
-                if(tempWrong3 != ""){
-                    strcpy(wrong3, tempWrong3.c_str());
-                }
-
-                /////Kategorie
-                cout << "alte Kategorie: " << category << endl;
-                int tempCategory;
-                string tempCategoryString;
-                do {
-                    cout << "neue Kategorie (1-" << MAX_CATEGORIES << "): ";
-                    getline(cin, tempCategoryString);
-                    istringstream ss(tempCategoryString);
-                    ss >> tempCategory;
-                } while ((tempCategory < 1 || tempCategory > MAX_CATEGORIES) && tempCategoryString != "");
-                // Überspringen, wenn Kategorie mit Enter verlassen wurde:
-                if (tempCategoryString != "") {
-                    category = tempCategory;
-                }
-
-                EXEC SQL UPDATE quiz SET correct = :correct, question = :question, wrong1 = :wrong1, wrong2 = :wrong2, wrong3 = :wrong3, category = :category WHERE qid = :qid;
-                EXEC SQl COMMIT;
+                editQuestion(id);
                 break;
-
         }
     } while(input != "q");
 

@@ -41,3 +41,23 @@ void SqlHelper::deleteQuestion(int questionId) {
     EXEC SQL DELETE FROM quiz WHERE qid = :qid;
     EXEC SQl COMMIT;
 }
+
+void SqlHelper::updateQuestion(Question *q) {
+    EXEC SQL BEGIN DECLARE SECTION;
+    int category = q->category;
+    int qid = q->qid;
+    char question[64];
+    char correct[64];
+    char wrong1[64];
+    char wrong2[64];
+    char wrong3[64];
+    EXEC SQL END DECLARE SECTION;
+    strcpy(question, q->question.c_str());
+    strcpy(correct, q->correct.c_str());
+    strcpy(wrong1, q->wrong1.c_str());
+    strcpy(wrong2, q->wrong2.c_str());
+    strcpy(wrong3, q->wrong3.c_str());
+
+    EXEC SQL UPDATE quiz SET correct = :correct, question = :question, wrong1 = :wrong1, wrong2 = :wrong2, wrong3 = :wrong3, category = :category WHERE qid = :qid;
+    EXEC SQl COMMIT;
+}
