@@ -119,27 +119,21 @@ void getCategories() {
 }
 
 void deleteQuestion(int id) {
-    if (id == -1) {
+    string selectedId;
+    while(id == -1) { //ToDo Abfrage, ob ID vorhanden ist
         cout << "Welche Frage wollen Sie löschen?" << endl;
-        string selectedId;
         getQuestions();
-        do
-        {
-            cout << "Bitte wählen Sie die ID aus!" << endl ;
-            cout << "Durch q können Sie abbrechen!" << endl;
-            getline(cin, selectedId);
-            if ( selectedId == "q" || selectedId == "Q")
-            {
-                return;
-            }
-            istringstream ss(selectedId);
-            ss >> id;
-            if (id == -1)
-            {
-                cout << selectedId << " ist keine gueltige ID!" << endl;
-            }
+        cout << "Bitte wählen Sie die ID aus!" << endl ;
+        cout << "Durch q können Sie abbrechen!" << endl;
+        getline(cin, selectedId);
+        if ( selectedId == "q" || selectedId == "Q") {
+            return;
         }
-        while(id == -1); //ToDo Abfrage, ob ID vorhanden ist
+        istringstream ss(selectedId);
+        ss >> id;
+        if (id == -1) {
+            cout << selectedId << " ist keine gueltige ID!" << endl;
+        }
     }
     SqlHelper::deleteQuestion(id);
 }
