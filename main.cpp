@@ -223,13 +223,7 @@ int main() {
 
         EXEC SQL BEGIN DECLARE SECTION;
         int category;
-        int qid = id;
         int cid = id;
-        char question[64];
-        char correct[64];
-        char wrong1[64];
-        char wrong2[64];
-        char wrong3[64];
         char name[64];
         EXEC SQL END DECLARE SECTION;
 
