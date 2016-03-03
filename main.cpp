@@ -27,6 +27,16 @@ void insertQuestion(int ctg, const char* quest, const char* cor, const char* wr1
     EXEC SQL COMMIT;
 }
 
+void insertCategory(const char* ctg) {
+    EXEC SQL BEGIN DECLARE SECTION;
+    const char* cat;
+    EXEC SQL END DECLARE SECTION;
+    cat = ctg;
+
+    EXEC SQL INSERT INTO "category" VALUES (:cat);
+    EXEC SQL COMMIT;
+}
+
 string removeSpaces(string input) {
     int length = input.length();
     for (int i = 0; i < length; i++) {
@@ -73,6 +83,15 @@ void createQuestion() {
     insertQuestion(category, question.c_str(), answer.c_str(), wrong1.c_str(), wrong2.c_str(), wrong3.c_str());
 }
 
+void createCategory() {
+    string categoryString1;
+
+    cout << endl << "Bitte Kategoriebezeichnung eingeben: ";
+    getline(cin, categoryString1);
+
+    insertCategory(categoryString1.c_str());
+}
+
 void getQuestions() {
     cout << endl;
     EXEC SQL BEGIN DECLARE SECTION;
@@ -91,32 +110,21 @@ void getQuestions() {
     EXEC SQL CLOSE cur;
 }
 
-/*void changeQuestionPart(int _id, string partText, const char* partName, char* _part){
-    EXEC SQL BEGIN DECLARE SECTION;
-    const char* part;
-    int id;
-    EXEC SQL END DECLARE SECTION;
-    cout << "alte " << partText <<": " << _part << endl;
-    string tempPart;
-    cout << "neue " << partText <<": ";
-    getline(cin , tempPart);
-    if(tempPart != ""){
-        strcpy(_part, tempPart.c_str());
-    };
-    part = _part;
-    id = _id;
-    EXEC SQL UPDATE quiz SET partName = :part WHERE id = :id;
-}*/
 
 int main() {
     EXEC SQL CONNECT TO 'csdb3@lamp.wlan.hwr-berlin.de' USER csdb3 IDENTIFIED BY csdb3;
     string input;
     do {
         cout << endl << "q - schließen" << endl;
-        cout << "e - eintragen" << endl;
-        cout << "a [id] - anzeigen" << endl;
-        cout << "l [id] - löschen" << endl;
-        cout << "b [id] - bearbeiten" << endl;
+        cout << "1 - Frage eintragen" << endl;
+        cout << "2 [id] - Frage anzeigen" << endl;
+        cout << "3 [id] - Frage löschen" << endl;
+        cout << "4 [id] - Frage bearbeiten" << endl;
+        //////////category
+        cout << "5 - Kategorie eintragen" << endl;
+        cout << "6 [id] - Kategorie anzeigen" << endl;
+        cout << "7 [id] - Kategorie löschen" << endl;
+        cout << "8 [id] - Kategorie bearbeiten" << endl;
         getline(cin, input);
 
         input = removeSpaces(input);
@@ -135,10 +143,10 @@ int main() {
         EXEC SQL END DECLARE SECTION;
 
         switch (input[0]) {
-            case 'e':
+            case '1':
                 createQuestion();
                 break;
-            case 'a':
+            case '2':
                 if (input.substr(1) == "") {
                     getQuestions();
                 } else {
@@ -154,7 +162,7 @@ int main() {
                     cout << "Kategorie: " << category << endl;
                 }
                 break;
-            case 'l':
+            case '3':
                 if (input.substr(1) == "") {
                     cout << "Welche Frage wollen Sie löschen?" << endl;
                     string selectedId;
@@ -181,7 +189,19 @@ int main() {
                 EXEC SQL DELETE FROM quiz WHERE qid = :qid;
                 EXEC SQl COMMIT;
                 break;
-            case 'b':
+
+            case '5':
+                createCategory();
+                break;
+            case '6':
+
+                break;
+            case '7':
+                break;
+            case '8':
+                break;
+
+            case '4':
                 if (input.substr(1) == "") {
                     cout << "Welche Frage wollen Sie bearbeiten?" << endl;
                     string selectedId;
@@ -267,13 +287,9 @@ int main() {
                 }
 
                 EXEC SQL UPDATE quiz SET correct = :correct, question = :question, wrong1 = :wrong1, wrong2 = :wrong2, wrong3 = :wrong3, category = :category WHERE qid = :qid;
-/*
-                changeQuestionPart(qid, "falsche Antwort_1", "wrong1", wrong1);
-                changeQuestionPart(qid, "falsche Antwort_2", "wrong2", wrong2);
-                changeQuestionPart(qid, "falsche Antwort_3", "wrong3", wrong3);
-*/
                 EXEC SQl COMMIT;
                 break;
+
         }
     } while(input != "q");
 
