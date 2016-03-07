@@ -37,7 +37,7 @@ void getQuestions() {
     char question[64];
     EXEC SQL END DECLARE SECTION;
 
-    EXEC SQL DECLARE cur CURSOR FOR SELECT qid, category, question FROM quiz;
+    EXEC SQL DECLARE cur CURSOR FOR SELECT qid, category, question FROM quiz ORDER BY qid;
     EXEC SQL OPEN cur;
     EXEC SQL WHENEVER NOT FOUND DO break;
     while (1) {
@@ -66,7 +66,7 @@ void getCategories() {
     char name[64];
     EXEC SQL END DECLARE SECTION;
 
-    EXEC SQL DECLARE cur2 CURSOR FOR SELECT cid, name FROM category;
+    EXEC SQL DECLARE cur2 CURSOR FOR SELECT cid, name FROM category ORDER BY cid;
     EXEC SQL OPEN cur2;
     EXEC SQL WHENEVER NOT FOUND DO break;
     while (1) {
