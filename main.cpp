@@ -195,17 +195,14 @@ int main() {
     SqlHelper::openDatabase();
     string input;
     do {
-        cout << endl << "q - schließen" <<  endl;
-        cout <<  "////////Fragen///////////////////////Kategorien//////////" <<  endl;
-        cout << "1 - Frage eintragen" <<  "        //    5 - Kategorie eintragen" << endl;
+        cout << endl << endl << endl;
+        cout << "         Fragen         " << "                  Kategorien" <<  endl;
+        cout << "1      - Frage eintragen" << "   //    5      - Kategorie eintragen" << endl;
         cout << "2 [id] - Frage anzeigen" << "    //    6 [id] - Kategorie anzeigen" << endl;
         cout << "3 [id] - Frage löschen" << "     //    7 [id] - Kategorie löschen" <<endl;
         cout << "4 [id] - Frage bearbeiten" << "  //    8 [id] - Kategorie bearbeiten" << endl;
-/*        //////////category
-        cout << "5 - Kategorie eintragen" << endl;
-        cout << "6 [id] - Kategorie anzeigen" << endl;
-        cout << "7 [id] - Kategorie löschen" << endl;
-        cout << "8 [id] - Kategorie bearbeiten" << endl;*/
+        cout << "q      - schließen" <<  endl;
+
         getline(cin, input);
 
         input = removeSpaces(input);
