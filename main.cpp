@@ -21,36 +21,6 @@ string removeSpaces(string input) {
     return input;
 }
 
-void createQuestion() {
-    Question* q = new Question();
-
-    cout << endl << "Bitte eingeben" << endl;
-    cout << "Deine Frage: ";
-    getline(cin, q->question);
-
-    cout << "Richtige Antwort: ";
-    getline(cin, q->correct);
-
-    cout << "Falsche Antwort 1: ";
-    getline(cin, q->wrong1);
-
-    cout << "Falsche Antwort 2: ";
-    getline(cin, q->wrong2);
-
-    cout << "Falsche Antwort 3: ";
-    getline(cin, q->wrong3);
-
-    string categoryString;
-    do {
-        cout << "Kategorie (1-" << MAX_CATEGORIES << "): ";
-        getline(cin, categoryString);
-        istringstream ss(categoryString);
-        ss >> q->category;
-    } while (q->category < 1 || q->category > MAX_CATEGORIES);
-
-    SqlHelper::insertQuestions(q);
-    cout << "inserted " << q->question << endl;
-}
 
 void createCategory() {
     Category* category = new Category();
@@ -104,6 +74,34 @@ void getCategories() {
         cout << cid << " - " << name << endl;
     }
     EXEC SQL CLOSE cur2;
+}
+
+void createQuestion() {
+    Question* q = new Question();
+
+    cout << endl << "Bitte eingeben" << endl;
+    cout << "Deine Frage: ";
+    getline(cin, q->question);
+
+    cout << "Richtige Antwort: ";
+    getline(cin, q->correct);
+
+    cout << "Falsche Antwort 1: ";
+    getline(cin, q->wrong1);
+
+    cout << "Falsche Antwort 2: ";
+    getline(cin, q->wrong2);
+
+    cout << "Falsche Antwort 3: ";
+    getline(cin, q->wrong3);
+
+    string categoryString;
+    cout << "Kategorie";
+    getCategories();
+    getline(cin, categoryString);
+    istringstream ss(categoryString);
+    ss >> q->category;
+    SqlHelper::insertQuestions(q);
 }
 
 void deleteQuestion(int id) {
