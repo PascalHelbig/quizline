@@ -5,6 +5,8 @@ using namespace std;
 
 void SqlHelper::openDatabase() {
     EXEC SQL CONNECT TO 'csdb3@lamp.wlan.hwr-berlin.de' USER csdb3 IDENTIFIED BY csdb3;
+    EXEC SQL WHENEVER SQLERROR SQLPRINT;
+    EXEC SQL WHENEVER SQLWARNING SQLPRINT;
 }
 
 void SqlHelper::insertQuestions(Question *q) {
