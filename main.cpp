@@ -176,12 +176,15 @@ void editQuestion(int id) {
     /////Kategorie
     cout << "alte Kategorie: " << q->category << endl;
     int tempCategory;
+    bool found;
     do {
-        cout << "neue Kategorie (1-" << MAX_CATEGORIES << "): ";
+        cout << "neue Kategorie: ";
+        getCategories();
         getline(cin, temp);
         istringstream ss(temp);
         ss >> tempCategory;
-    } while ((tempCategory < 1 || tempCategory > MAX_CATEGORIES) && temp != "");
+        found = SqlHelper::existCategory(tempCategory);
+    } while (!found && temp != "");
     // Überspringen, wenn Kategorie mit Enter verlassen wurde:
     q->category = temp == "" ? q->category : tempCategory;
 
