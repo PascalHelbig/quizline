@@ -197,7 +197,7 @@ int main() {
         cout << "1 - Frage eintragen" <<  "        //    5 - Kategorie eintragen" << endl;
         cout << "2 [id] - Frage anzeigen" << "    //    6 [id] - Kategorie anzeigen" << endl;
         cout << "3 [id] - Frage löschen" << "     //    7 [id] - Kategorie löschen" <<endl;
-        cout << "4 [id] - Frage bearbeiten" << "  //    8 [id] - Ka tegorie bearbeiten" << endl;
+        cout << "4 [id] - Frage bearbeiten" << "  //    8 [id] - Kategorie bearbeiten" << endl;
 /*        //////////category
         cout << "5 - Kategorie eintragen" << endl;
         cout << "6 [id] - Kategorie anzeigen" << endl;
