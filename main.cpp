@@ -125,7 +125,12 @@ void deleteQuestion(int id) {
             cout << selectedId << " ist keine gueltige ID!" << endl;
         }
     }
-    SqlHelper::deleteQuestion(id);
+    cout << "Wollen sie die Frage " << id << " wirklich löschen? (y/N)" << endl;
+    string confirm;
+    getline(cin, confirm);
+    if (confirm == "y") {
+        SqlHelper::deleteQuestion(id);
+    }
 }
 
 void editQuestion(int id) {
@@ -194,6 +199,7 @@ void editQuestion(int id) {
 int main() {
     SqlHelper::openDatabase();
     string input;
+    string confirm;
     do {
         cout << endl << endl << endl;
         cout << "         Fragen         " << "                  Kategorien" <<  endl;
@@ -275,8 +281,12 @@ int main() {
                     while(cid == 0); //ToDo Abfrage, ob ID vorhanden ist
 
                 }
-                EXEC SQL DELETE FROM category WHERE cid = :cid;
-                EXEC SQl COMMIT;
+                cout << "Wollen sie die Kategorie " << cid << " wirklich löschen? (y/N)" << endl;
+                getline(cin, confirm);
+                if (confirm == "y") {
+                    EXEC SQL DELETE FROM category WHERE cid = :cid;
+                    EXEC SQl COMMIT;
+                }
                 break;
             case '8':
                 if (input.substr(1) == "") {
