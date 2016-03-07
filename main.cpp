@@ -206,6 +206,9 @@ int main() {
         getline(cin, input);
 
         input = removeSpaces(input);
+        if (input == "") {
+            input = " ";
+        }
         int id;
         istringstream ss(input.substr(1));
         ss >> id;
