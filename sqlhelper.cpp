@@ -71,3 +71,12 @@ void SqlHelper::insertCategory(Category *c) {
     EXEC SQL INSERT INTO "category" ("name") VALUES (:name);
     EXEC SQL COMMIT;
 }
+
+bool SqlHelper::existCategory(int cid) {
+    EXEC SQL BEGIN DECLARE SECTION;
+    int cid2 = cid;
+    int foundCid;
+    EXEC SQL END DECLARE SECTION;
+    EXEC SQL SELECT cid INTO :foundCid FROM category WHERE cid = :cid2;
+    return cid == foundCid;
+}

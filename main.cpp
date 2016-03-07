@@ -96,11 +96,15 @@ void createQuestion() {
     getline(cin, q->wrong3);
 
     string categoryString;
-    cout << "Kategorie";
-    getCategories();
-    getline(cin, categoryString);
-    istringstream ss(categoryString);
-    ss >> q->category;
+    bool found;
+    do {
+        cout << "Kategorie wählen:";
+        getCategories();
+        getline(cin, categoryString);
+        istringstream ss(categoryString);
+        ss >> q->category;
+        found = SqlHelper::existCategory(q->category);
+    } while(!found);
     SqlHelper::insertQuestions(q);
 }
 

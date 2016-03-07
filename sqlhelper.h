@@ -12,5 +12,6 @@ public:
     static void updateQuestion(Question* q);
 
     static void insertCategory(Category* c);
+    static bool existCategory(int cid);
 };
 #endif //QUIZLINE_SQLHELPER_H
