@@ -40,10 +40,22 @@ void getQuestions() {
     EXEC SQL DECLARE cur CURSOR FOR SELECT qid, category, question FROM quiz ORDER BY qid;
     EXEC SQL OPEN cur;
     EXEC SQL WHENEVER NOT FOUND DO break;
-    while (1) {
+    int lineCounter = 0;
+    string userAction;
+    do{
         EXEC SQL FETCH cur INTO :qid, :category, :question;
         cout << qid << " - " << question << " (" << category << ")" << endl;
-    }
+        lineCounter++;
+        if (lineCounter == 5)
+        {
+            cout << "Durch Enter mehr anzeigen. Alles andere zum Abbrechen." << endl;
+            getline(cin,userAction);
+            if (userAction == "")
+            {
+                lineCounter = 0;
+            }
+        }
+    }while(lineCounter < 5);
     EXEC SQL CLOSE cur;
 }
 
