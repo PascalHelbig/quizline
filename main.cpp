@@ -29,34 +29,64 @@ void createCategory() {
     SqlHelper::insertCategory(category);
 }
 
-void getQuestions() {
+void getQuestions(int catNumber) {
     cout << endl;
     EXEC SQL BEGIN DECLARE SECTION;
     int category;
     int qid;
     char question[64];
+    int sqlCatNumber = catNumber;
     EXEC SQL END DECLARE SECTION;
 
-    EXEC SQL DECLARE cur CURSOR FOR SELECT qid, category, question FROM quiz ORDER BY qid;
-    EXEC SQL OPEN cur;
-    EXEC SQL WHENEVER NOT FOUND DO break;
-    int lineCounter = 0;
-    string userAction;
-    do{
-        EXEC SQL FETCH cur INTO :qid, :category, :question;
-        cout << qid << " - " << question << " (" << category << ")" << endl;
-        lineCounter++;
-        if (lineCounter == 5)
-        {
-            cout << "Durch Enter mehr anzeigen. Alles andere zum Abbrechen." << endl;
-            getline(cin,userAction);
-            if (userAction == "")
+    if (catNumber == -1) {
+        EXEC SQL DECLARE cur CURSOR FOR SELECT qid, category, question FROM quiz ORDER BY qid;
+        EXEC SQL OPEN cur;
+
+        EXEC SQL WHENEVER NOT FOUND DO break;
+        int lineCounter = 0;
+        string userAction;
+        do{
+            EXEC SQL FETCH cur INTO :qid, :category, :question;
+            cout << qid << " - " << question << " (" << category << ")" << endl;
+            lineCounter++;
+            if (lineCounter == 5)
             {
-                lineCounter = 0;
+                cout << "Durch Enter mehr anzeigen. Alles andere zum Abbrechen." << endl;
+                getline(cin,userAction);
+                if (userAction == "")
+                {
+                    lineCounter = 0;
+                }
             }
-        }
-    }while(lineCounter < 5);
-    EXEC SQL CLOSE cur;
+        }while(lineCounter < 5);
+        EXEC SQL CLOSE cur;
+    }
+    else
+    {
+        EXEC SQL DECLARE cur3 CURSOR FOR SELECT qid, category, question FROM quiz WHERE category = :sqlCatNumber ORDER BY qid;
+        EXEC SQL OPEN cur3;
+
+        EXEC SQL WHENEVER NOT FOUND DO break;
+        int lineCounter = 0;
+        string userAction;
+        do{
+            EXEC SQL FETCH cur3 INTO :qid, :category, :question;
+            cout << qid << " - " << question << " (" << category << ")" << endl;
+            lineCounter++;
+            if (lineCounter == 5)
+            {
+                cout << "Durch Enter mehr anzeigen. Alles andere zum Abbrechen." << endl;
+                getline(cin,userAction);
+                if (userAction == "")
+                {
+                    lineCounter = 0;
+                }
+            }
+        }while(lineCounter < 5);
+        EXEC SQL CLOSE cur3;
+    }
+
+
 }
 
 void getQuestion(int id) {
@@ -124,7 +154,7 @@ void deleteQuestion(int id) {
     string selectedId;
     while(id == -1) { //ToDo Abfrage, ob ID vorhanden ist
         cout << "Welche Frage wollen Sie löschen?" << endl;
-        getQuestions();
+        getQuestions(-1);
         cout << "Bitte wählen Sie die ID aus!" << endl ;
         cout << "Durch q können Sie abbrechen!" << endl;
         getline(cin, selectedId);
@@ -149,7 +179,7 @@ void editQuestion(int id) {
     string selectedId;
     while (id == -1) {
         cout << "Welche Frage wollen Sie bearbeiten?" << endl;
-        getQuestions();
+        getQuestions(-1);
         cout << endl << "Bitte wählen Sie die ID aus!" << endl ;
         cout << "Durch q können Sie abbrechen!" << endl;
         getline(cin, selectedId);
@@ -207,6 +237,16 @@ void editQuestion(int id) {
 
     SqlHelper::updateQuestion(q);
 }
+void questionByCategory(){
+    string categoryName;
+    int categoryId;
+    getCategories();
+    cout << "Bitte wählen Sie eine Kategorienummer aus: ";
+    getline(cin , categoryName);
+    istringstream ss(categoryName);
+    ss >> categoryId;
+    getQuestions(categoryId);
+}
 
 int main() {
     SqlHelper::openDatabase();
@@ -219,6 +259,7 @@ int main() {
         cout << "2 [id] - Frage anzeigen" << "    //    6 [id] - Kategorie anzeigen" << endl;
         cout << "3 [id] - Frage löschen" << "     //    7 [id] - Kategorie löschen" <<endl;
         cout << "4 [id] - Frage bearbeiten" << "  //    8 [id] - Kategorie bearbeiten" << endl;
+        cout << "                   9 - Alle Fragen einer Kategorie anzeigen lassen" << endl;
         cout << "q      - schließen" <<  endl;
 
         getline(cin, input);
@@ -244,7 +285,7 @@ int main() {
                 break;
             case '2':
                 if (input.substr(1) == "") {
-                    getQuestions();
+                    getQuestions(-1);
                 } else {
                     getQuestion(id);
                 }
@@ -339,6 +380,9 @@ int main() {
 
                 EXEC SQL UPDATE category SET name = :name WHERE cid = :cid;
                 EXEC SQl COMMIT;
+                break;
+            case '9':
+                questionByCategory();
                 break;
         }
     } while(input != "q");
