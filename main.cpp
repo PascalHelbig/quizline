@@ -255,11 +255,11 @@ int main() {
     do {
         cout << endl << endl << endl;
         cout << "         Fragen         " << "                  Kategorien" <<  endl;
-        cout << "1      - Frage eintragen" << "   //    5      - Kategorie eintragen" << endl;
-        cout << "2 [id] - Frage anzeigen" << "    //    6 [id] - Kategorie anzeigen" << endl;
-        cout << "3 [id] - Frage löschen" << "     //    7 [id] - Kategorie löschen" <<endl;
-        cout << "4 [id] - Frage bearbeiten" << "  //    8 [id] - Kategorie bearbeiten" << endl;
-        cout << "                   9 - Alle Fragen einer Kategorie anzeigen lassen" << endl;
+        cout << "1      - Frage eintragen" << "   //    6      - Kategorie eintragen" << endl;
+        cout << "2 [id] - Frage anzeigen" << "    //    7 [id] - Kategorie anzeigen" << endl;
+        cout << "3 [id] - Frage löschen" << "     //    8 [id] - Kategorie löschen" <<endl;
+        cout << "4 [id] - Frage bearbeiten" << "  //    9 [id] - Kategorie bearbeiten" << endl;
+        cout << "5      - Alle Fragen einer Kategorie anzeigen lassen" << endl;
         cout << "q      - schließen" <<  endl;
 
         getline(cin, input);
@@ -297,9 +297,12 @@ int main() {
                 editQuestion(id);
                 break;
             case '5':
-                createCategory();
+                questionByCategory();
                 break;
             case '6':
+                createCategory();
+                break;
+            case '7':
                 if (input.substr(1) == "") {
                     getCategories();
                 } else {
@@ -310,7 +313,7 @@ int main() {
                     cout << "Kategoriebezeichnung: " << category << endl;
                 }
                 break;
-            case '7':
+            case '8':
                 if (input.substr(1) == "") {
                     cout << "Welche Kategorie wollen Sie löschen?" << endl;
                     string selectedcId;
@@ -341,7 +344,7 @@ int main() {
                     EXEC SQl COMMIT;
                 }
                 break;
-            case '8':
+            case '9':
                 if (input.substr(1) == "") {
                     cout << "Welche Kategorie wollen Sie bearbeiten?" << endl;
                     string selectedcId;
@@ -380,9 +383,6 @@ int main() {
 
                 EXEC SQL UPDATE category SET name = :name WHERE cid = :cid;
                 EXEC SQl COMMIT;
-                break;
-            case '9':
-                questionByCategory();
                 break;
         }
     } while(input != "q");
